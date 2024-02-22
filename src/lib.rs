@@ -1,5 +1,3 @@
-use std::error::Error;
-
 /// Analogous to regular `map` but works on any type.  
 /// Transforms one type into another.
 pub trait MapType<M> {
@@ -31,11 +29,11 @@ impl<T> NoneIf<T> for T {
 /// Wraps type in `Result` and returns `Err` if condition is true.
 pub trait ErrIf<T> {
     /// Returns a given error on `cond == true`.
-    fn err_if<E: Error>(self, cond: impl Fn(&Self) -> bool, err: E) -> Result<T, E>;
+    fn err_if<E>(self, cond: impl Fn(&Self) -> bool, err: E) -> Result<T, E>;
 }
 
 impl<T> ErrIf<T> for T {
-    fn err_if<E: Error>(self, cond: impl Fn(&Self) -> bool, err: E) -> Result<Self, E> {
+    fn err_if<E>(self, cond: impl Fn(&Self) -> bool, err: E) -> Result<Self, E> {
         match cond(&self) {
             true => Err(err),
             _ => Ok(self),
